@@ -98,6 +98,29 @@ class Container {
     return providers[T]?.get(this);
   }
 
+  /// Attemps to resolve the type [T].
+  ///
+  /// If [name] is set, the instance or builder registered with this
+  /// name will be get.
+  ///
+  /// See also:
+  ///
+  ///  * [Container.registerFactory] for register a builder function.
+  ///  * [Container.registerInstance] for register an instance.
+  List<T> resolveAll<T>([String name]) {
+    Map<Type, _Provider<Object>> providers = _namedProviders[name];
+
+    List<T> returned = [];
+
+    if (providers == null) {
+      return null;
+    }
+    
+    providers.forEach((key, item) {returned.add(item?.get(this));} );
+
+    return returned;
+  }
+
   T call<T>([String name]) => resolve<T>(name);
 
   /// Removes all instances and builders from the container.
